@@ -1,6 +1,12 @@
 from django.db import models
 
 
+def imagens_selfie(instance, filename):
+    return '/'.join(
+        ['selfie', str(instance.id_paciente), filename]
+    )
+
+
 class Pacientes(models.Model):
     id_paciente = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=100, blank=True, null=True)
@@ -12,6 +18,8 @@ class Pacientes(models.Model):
     cep = models.CharField(max_length=100, blank=True, null=True)
     data_cadastro = models.DateField(auto_now_add=True)
     rg = models.CharField(max_length=100, blank=True, null=True)
+    selfie = models.ImageField(
+        blank=True, null=True, upload_to=imagens_selfie)
 
     class Meta:
         managed = True
