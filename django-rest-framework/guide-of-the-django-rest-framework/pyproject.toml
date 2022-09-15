@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "guide-of-the-django-rest-framework"
+version = "0.1.0"
+description = ""
+authors = ["Cristiano <cristianosampaio16@gmail.com>"]
+readme = "README.md"
+packages = [{include = "guide_of_the_django_rest_framework"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.1.1"
+djangorestframework = "^3.13.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
