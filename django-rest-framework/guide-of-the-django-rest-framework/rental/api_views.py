@@ -1,11 +1,13 @@
 from rest_framework import viewsets
 
 from rental import models, serializers
+from rental.permissions import IsOwner
 
 
 class FriendViewset(viewsets.ModelViewSet):
     queryset = models.Friend.objects.all()
     serializer_class = serializers.FriendSerializer
+    permission_classes = [IsOwner]
 
 
 class BelongingViewset(viewsets.ModelViewSet):
