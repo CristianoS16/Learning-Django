@@ -34,7 +34,7 @@ class Friend(OwnedModel):
         if hasattr(self, 'ann_overdue'):
             return self.ann_overdue
         return self.borrowed_set.filter(
-            returned__isnull=True, when=pendulum.now().subtract(months=2)
+            returned__isnull=True, when__lte=pendulum.now().subtract(months=2)
         ).exists()
 
     def __str__(self):

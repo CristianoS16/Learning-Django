@@ -7,11 +7,10 @@ class FriendSerializer(serializers.ModelSerializer):
     owner = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
-    has_overdue = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Friend
-        fields = ('id', 'name', 'has_overdue')
+        fields = ('id', 'name', "owner", 'has_overdue')
 
 
 class BelongingSerializer(serializers.ModelSerializer):
