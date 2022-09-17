@@ -1,4 +1,3 @@
-import pendulum
 from rest_framework import serializers
 
 from rental import models
@@ -13,13 +12,6 @@ class FriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Friend
         fields = ('id', 'name', 'has_overdue')
-
-    def get_has_overdue(self, obj):
-        if hasattr(obj, 'ann_overdue'):
-            return obj.ann_overdue
-        return obj.borrowed_set.filter(
-            returned__isnull=True, when=pendulum.now().subtract(months=2)
-        ).exists()
 
 
 class BelongingSerializer(serializers.ModelSerializer):
