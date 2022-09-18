@@ -28,6 +28,7 @@ class FriendQuerySet(models.QuerySet):
 class Friend(OwnedModel):
     name = models.CharField(max_length=100)
     objects = FriendQuerySet.as_manager()
+    email = models.EmailField(default='')
 
     @property
     def has_overdue(self):
