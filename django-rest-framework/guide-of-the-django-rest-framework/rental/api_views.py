@@ -1,5 +1,6 @@
 import django_filters
 from django.core.mail import send_mail
+from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,13 +10,13 @@ from rental import models, serializers
 from rental.permissions import IsOwner
 
 
-class FriendViewset(NestedViewSetMixin, viewsets.ModelViewSet):
+class FriendViewset(NestedViewSetMixin, FlexFieldsModelViewSet):
     queryset = models.Friend.objects.with_overdue()
     serializer_class = serializers.FriendSerializer
     permission_classes = [IsOwner]
 
 
-class BelongingViewset(viewsets.ModelViewSet):
+class BelongingViewset(FlexFieldsModelViewSet):
     queryset = models.Belonging.objects.all()
     serializer_class = serializers.BelongingSerializer
 
@@ -38,8 +39,9 @@ class BorrowedFilterSet(django_filters.FilterSet):
         return queryset
 
 
-class BorrowedViewset(NestedViewSetMixin, viewsets.ModelViewSet):
-    queryset = models.Borrowed.objects.all()
+class BorrowedViewset(NestedViewSetMixin, FlexFieldsModelViewSet):
+    queryset = models.Borrowed.objects.all().select_related('to_who', 'what')
+    permit_list_expands = ['what', 'to_who']
     serializer_class = serializers.BorrowedSerializer
 
     # filter using django_filters
