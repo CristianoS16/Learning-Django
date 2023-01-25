@@ -1,4 +1,3 @@
-from models import Recipe
 from rest_framework import serializers
 
 
