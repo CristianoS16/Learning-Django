@@ -3,41 +3,39 @@ from rest_framework import serializers
 
 from tag.models import Tag
 
-from .models import Category
+from .models import Category, Recipe
 
 
-class TagSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField(max_length=255)
-    slug = serializers.SlugField()
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
 
 
-class RecipeSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=65)
-    description = serializers.CharField(max_length=65)
-    public = serializers.BooleanField(source="is_published")
+class RecipeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'title', 'description', 'author', 'category', 'category_name',
+                  'tags', 'public', 'preparation', 'tag_objects', 'tag_links']
+
+    public = serializers.BooleanField(source="is_published", read_only=True)
     preparation = serializers.SerializerMethodField(
-        method_name="any_method_name")
+        method_name="any_method_name", read_only=True)
     # category = serializers.PrimaryKeyRelatedField(
     #     queryset=Category.objects.all(),
     # )
     category_name = serializers.StringRelatedField(
-        source='category'
+        source='category',
+        read_only=True
     )
-    author = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all()
-    )
-    tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(),
-        many=True
-    )
-    tag_objects = TagSerializer(many=True, source="tags")
+    tag_objects = TagSerializer(many=True, source="tags", read_only=True)
     tag_links = serializers.HyperlinkedRelatedField(
         many=True,
         source='tags',
-        queryset=Tag.objects.all(),
-        view_name='recipes:recipe_api_v2_tag'
+        view_name='recipes:recipe_api_v2_tag',
+        read_only=True
     )
 
     def any_method_name(self, recipe):
