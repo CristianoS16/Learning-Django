@@ -41,3 +41,28 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def any_method_name(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
+
+    def validate(self, attrs):
+        super_clean = super().validate(attrs)
+        cd = attrs
+
+        title = attrs.get('title')
+        description = attrs.get('description')
+
+        if title == description:
+            raise serializers.ValidationError(
+                {
+                    "title": ["Posso", "ter", "mais", "de um error"],
+                    "description": ["Posso", "ter", "mais", "de um error"]
+                }
+            )
+
+        return super_clean
+
+    def validate_title(self, value):
+        title = value
+
+        if(len(title) < 5):
+            raise serializers.ValidationError("Must have at least 5 chars.")
+
+        return title
