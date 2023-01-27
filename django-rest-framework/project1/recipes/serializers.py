@@ -17,8 +17,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'description', 'author', 'category', 'category_name',
-                  'tags', 'public', 'preparation', 'tag_objects', 'tag_links']
+        fields = ['id', 'title', 'description', 'author', 'category',
+                  'category_name', 'tags', 'public', 'preparation',
+                  'tag_objects', 'tag_links']
 
     public = serializers.BooleanField(source="is_published", read_only=True)
     preparation = serializers.SerializerMethodField(
