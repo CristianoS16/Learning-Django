@@ -60,7 +60,7 @@ urlpatterns = [
     # path(
     #     'recipes/api/v2/<int:pk>/',
     #     views.RecipeAPIv2ViewSet.as_view({
-    #         'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy',
+    #         'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'
     #     }),
     #     name="recipe_api_v2_detail",
     # ),
