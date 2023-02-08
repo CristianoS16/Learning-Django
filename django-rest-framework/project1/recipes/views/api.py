@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -18,6 +19,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     queryset = Recipe.objects.get_published()
     serializer_class = RecipeSerializer
     pagination_class = RecipeAPIv2Pagination
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         return super().get_serializer_class()
@@ -35,7 +37,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
 
         category_id = self.request.query_params.get('category_id', None)
 
-        if category_id != '' and category_id.isnumeric():
+        if category_id != '' and category_id is not None and category_id.isnumeric():
             qs = qs.filter(category_id=category_id)
 
         return qs
