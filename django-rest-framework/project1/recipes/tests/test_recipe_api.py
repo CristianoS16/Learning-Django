@@ -8,6 +8,17 @@ from recipes.tests.test_recipe_base import RecipeMixin
 
 class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
 
+    def get_recipe_raw_data(self):
+        return {
+            'title': 'Title',
+            'description': 'Example of description',
+            'preparation_time': 1,
+            'preparation_time_unit': 'minutes',
+            'servings': 10,
+            'servings_unit': 'people',
+            'preparation_steps': 'Steps of example'
+        }
+
     def get_recipe_reverse_url(self, reverse_result=None):
         return reverse(
             'recipes:recipes-api-list'
@@ -92,5 +103,15 @@ class RecipeAPIv2Test(test.APITestCase, RecipeMixin):
             401
         )
 
-    def test_jwt_login(self):
-        print(self.get_jwt_access_token())
+    def test_recipe_api_list_logged_user_can_create_a_recipe(self):
+        data = self.get_recipe_raw_data()
+        response = self.client.post(
+            self.get_recipe_reverse_url(),
+            data=data,
+            HTTP_AUTHORIZATION=f'Bearer {self.get_jwt_access_token()}'
+        )
+        print(response.data)
+        self.assertEqual(
+            response.status_code,
+            201
+        )
