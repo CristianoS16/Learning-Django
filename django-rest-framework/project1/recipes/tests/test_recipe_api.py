@@ -148,3 +148,24 @@ class RecipeAPIv2Test(test.APITestCase, RecipeAPIv2TestMixin):
             response.data.get("title"),
             wanted_title
         )
+
+    def test_recipe_api_list_logged_user_can_update_a_recipe_owned_by_another_user(self):
+        # Arrange
+        recipe = self.make_recipe()
+        access_data = self.get_auth_data()
+        another_user = self.get_auth_data(username="new_user")
+        access_token = another_user.get('jwt_access_token')
+        recipe.save()
+
+        # Action
+        response = self.client.patch(
+            reverse('recipes:recipes-api-detail', args=(recipe.id,)),
+            data={},
+            HTTP_AUTHORIZATION=f'Bearer {access_token}'
+        )
+
+        # Assertion
+        self.assertEqual(
+            response.status_code,
+            403
+        )
